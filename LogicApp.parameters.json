@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "logicAppName": {
-      "value": "logic-integration_demo"
+      "value": "logic-integration_non_exist_demo"
     }
   }
 }
