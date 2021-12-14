@@ -56,13 +56,15 @@
       "type": "securestring",
       "metadata": {
         "description": "SSH private key (the content of the file should be provided entirely as is, in the multiline format)"
-      }
+      },
+       "defaultValue": ""
     },
     "sftpwithssh_1_sshPrivateKeyPassphrase": {
       "type": "securestring",
       "metadata": {
         "description": "SSH private key passphrase (if the private key is protected by a passphrase)"
-      }
+      },
+       "defaultValue": ""
     },
     "sftpwithssh_1_portNumber": {
       "type": "int",
