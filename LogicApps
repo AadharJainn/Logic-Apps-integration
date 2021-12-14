@@ -12,10 +12,10 @@
     },
     "logicAppLocation": {
       "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "description": "Location of the Logic App."
-      }
+      "defaultValue": ""
+    },  
+    "Integration_Account": {
+    "value": ""
     },
     "LogicAppIntegrationAccount": {
       "type": "string",
