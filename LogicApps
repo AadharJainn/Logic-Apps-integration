@@ -15,6 +15,7 @@
       "defaultValue": ""
     },
     "Integration_Account": {
+    "type": "string",
     "defaultValue": ""
     },
     "LogicAppIntegrationAccount": {
