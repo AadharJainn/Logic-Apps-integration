@@ -13,10 +13,6 @@
     "logicAppLocation": {
       "type": "string",
       "defaultValue": ""
-    },  
-    "Integration_Account": {
-    "type": "string",
-    "defaultValue": ""
     },
     "LogicAppIntegrationAccount": {
       "type": "string",
