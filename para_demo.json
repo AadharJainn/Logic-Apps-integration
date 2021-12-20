@@ -1,0 +1,12 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_logic_storage_name": {
+            "value": "logic-storage"
+        },
+      "connections_keyvault_externalid": {
+        "value": "/subscriptions/16be532f-d207-4d70-966d-c6ba9ad7d410/resourceGroups/Naman-Interns-RG/providers/Microsoft.Web/connections/keyvault"
+      }
+    }
+}

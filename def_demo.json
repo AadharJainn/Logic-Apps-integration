@@ -1,0 +1,124 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_logic_storage_name": {
+            "defaultValue": "",
+            "type": "String"
+        },
+        "connections_keyvault_externalid": {
+            "defaultValue": "",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_logic_storage_name')]",
+            "location": "eastus",
+            "tags": {
+                "displayName": "LogicApp"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "manual": {
+                            "type": "Request",
+                            "kind": "Http",
+                            "inputs": {
+                                "method": "POST"
+                            }
+                        }
+                    },
+                    "actions": {
+                        "Create_or_update_secret": {
+                            "runAfter": {
+                                "Disable_current_version": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Http",
+                            "inputs": {
+                                "authentication": {
+                                    "audience": "https://vault.azure.net",
+                                    "type": "ManagedServiceIdentity"
+                                },
+                                "body": {
+                                    "attributes": {
+                                        "enabled": true,
+                                        "exp": 1640908799,
+                                        "nbf": 1639785600
+                                    },
+                                    "contentType": "myContentType",
+                                    "value": "newpassword"
+                                },
+                                "method": "PUT",
+                                "uri": "https://aliases.vault.azure.net/secrets/key?api-version=7.2"
+                            }
+                        },
+                        "Disable_current_version": {
+                            "runAfter": {},
+                            "type": "Http",
+                            "inputs": {
+                                "authentication": {
+                                    "audience": "https://vault.azure.net",
+                                    "type": "ManagedServiceIdentity"
+                                },
+                                "body": {
+                                    "attributes": {
+                                        "enabled": false
+                                    }
+                                },
+                                "method": "PATCH",
+                                "uri": "https://aliases.vault.azure.net/secrets/key?api-version=7.2"
+                            }
+                        },
+                        "Get_secret_2": {
+                            "runAfter": {
+                                "Create_or_update_secret": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['keyvault']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/secrets/@{encodeURIComponent('key')}/value"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "keyvault": {
+                                "connectionId": "[parameters('connections_keyvault_externalid')]",
+                                "connectionName": "keyvault",
+                                "id": "/subscriptions/16be532f-d207-4d70-966d-c6ba9ad7d410/providers/Microsoft.Web/locations/eastus/managedApis/keyvault"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
